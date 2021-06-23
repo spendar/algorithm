@@ -43,6 +43,8 @@ public:
 				int temp = array[i];
 				array[i] = array[j];
 				array[j] = temp;
+				i = j;
+				j = i * 2;
 			}else
 				break;
 		}
