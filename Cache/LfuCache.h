@@ -12,6 +12,8 @@
 #include <mutex>
 #include <thread>
 #include <chrono>
+#include <vector>
+#include <iostream>
 
 
 
@@ -99,17 +101,28 @@ public:
 
     void clean() {
         while(!isStop_) {
-            std::this_thread::sleep_for(std::chrono:: milliseconds (1000));
+            std::this_thread::sleep_for(std::chrono:: milliseconds (3000));
             {
                 std::lock_guard<std::mutex> locker(mtx_);
+                minClick_ = 0;
                 // 清理过期键值对
-                for(auto& kv : m_) {
-                    Node<K,V>* temp = kv.second;
+                std::vector<int> keys;
+                for(auto iter = m_.begin(); iter != m_.end(); iter++) {
+                    Node<K,V>* temp = (*iter).second;
                     if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - temp->timestamp).count() > ttl_) {
                         erase(temp);
-                        m_.erase(kv.first);
+                        keys.push_back((*iter).first);
                         size_--;
+                    } else {
+                        if(!minClick_) {
+                            minClick_ = temp->click;
+                        } else {
+                            minClick_ = std::min(minClick_, temp->click);
+                        }
                     }
+                }
+                for(auto key : keys) {
+                    m_.erase(key);
                 }
             }
         }
