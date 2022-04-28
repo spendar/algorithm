@@ -1,7 +1,7 @@
 /*
  * @Author: spendar
  * @Date: 2022-04-04 21:21:35
- * @LastEditTime: 2022-04-26 17:04:17
+ * @LastEditTime: 2022-04-28 11:44:01
  * @LastEditors: Please set LastEditors
  * @Description: to implement a lfu cache with expired time
  * @FilePath: \Cache\LruCache.h
@@ -111,6 +111,7 @@ public:
                     Node<K,V>* temp = (*iter).second;
                     if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - temp->timestamp).count() > ttl_) {
                         erase(temp);
+                        delete temp;
                         keys.push_back((*iter).first);
                         size_--;
                     } else {
