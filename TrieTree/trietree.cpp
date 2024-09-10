@@ -1,6 +1,19 @@
+/*
+ * @Author: spendar
+ * @Date: 2021-05-17 19:33:14
+ * @LastEditors: spendar
+ * @LastEditTime: 2024-08-28 23:07:33
+ * @FilePath: /algorithm/TrieTree/trietree.cpp
+ * @Description: 
+ */
+
+#include <string>
+
+using namespace std;
+
 struct TreeNode{
 	TreeNode* child[26];
-}
+};
 
 //以一个字符串作为字典树的示范说明
 class TrieTree{
@@ -30,4 +43,4 @@ public:
 		}
 		return true;
 	}
-}
+};
